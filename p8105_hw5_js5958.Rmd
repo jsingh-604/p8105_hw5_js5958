@@ -4,24 +4,87 @@ output: pdf_document
 ---
 
 ```{r}
-list.files(path = "data/")
+library(tidyverse)
+library(rvest)
 
-
-```
-
-
-
-```{r}
-
-
-
-
-
+fls = list.files(path = "data/")
+fls
 ```
 
 
 ```{r}
+append  = function(x){
+  dat = read.csv(paste("q1_data/", x, sep = ""))
+  values = t(data.matrix(dat))
+  df_temp = data.frame(matrix(ncol = 0, nrow = 0))
+  name = gsub(".csv","",x)
+  print(name)
+  d[name] <- rbind(df_temp,values)
+}
+map(fls, append)
+```
 
 
+# Problem 2
+
+Create a city_state variable (e.g. “Baltimore, MD”) and then summarize within cities to obtain the total number of homicides and the number of unsolved homicides (those for which the disposition is “Closed without arrest” or “Open/No arrest”): 
+```{r}
+df = read.csv('q2_data/homicide-data.csv')
+homicide_df = df %>%
+  mutate(      #combind city and state together for easy reading 
+    city_state = str_c(city, state),
+    resolution = case_when(
+      disposition == "Closed without arrest" ~ "unsolved",
+      disposition == "Open/No arrest" ~ "unsolved")) %>% 
+   relocate(city_state)%>% 
+  filter(city_state != "TulsaAL")
+```
+
+
+Now for the city of Baltimore, MD, we use the prop.test function to estimate the proportion of homicides that are unsolved; save the output of prop.test as an R object, apply the broom::tidy to this object and pull the estimated proportion and confidence intervals from the resulting tidy dataframe:
+```{r}
+##### Subset df to baltimore_df
+baltimore_df = 
+  homicide_df %>% 
+  filter(city_state == "BaltimoreMD")
+
+
+#### proportion of homicides that are unsolved
+baltimore_summary = baltimore_df %>% 
+  summarize(
+    unsolved = sum(resolution == "Open/No arrest")
+  )
+
+
+#### 
+baltimore_test = 
+  prop.test(
+    x = baltimore_summary %>% pull(unsolved),
+    n = baltimore_summary %>% pull(n)
+)
+
+
+baltimore_test %>% 
+  broom::tidy()
+
+
+prop_test_function = function(city_df)
+  {
+  city_summary = 
+    city_df %>% 
+    summarize(
+      unsolved = sum(resolution == "unsolved"), 
+      n = n())
+  city_test = 
+    prop.test(x = city_summary %>% pull(unsolved),
+              n = city_summary %>% pull(n))
+  return(city_test)
+  }
+
+#let's test if we can use the function..
+homicide_df %>% 
+  filter(city_state == "AlbuquerqueNM")%>% 
+  prop_test_function()
 
 ```
+
