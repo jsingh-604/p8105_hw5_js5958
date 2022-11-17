@@ -167,7 +167,7 @@ mu  = 0
 output_list = map(.x = mu, ~rerun(5000, sim_n_sd(mu = .x)))
 ```
 
-Repeating the above for mu={0,1,2,3,4,5,6} and making a plot showing the proportion of times the null was rejected (the power of the test) on the y axis and the true value of $mu$ on the x axis. Describe the association between effect size and power.
+Repeating the above for mu={0,1,2,3,4,5,6} and making a plot showing the proportion of times the null was rejected (the power of the test) on the y axis and the true value of mu on the x axis.
 ```{r}
 sim_results_df = 
   tibble(mu = c(0, 1, 2, 3, 4, 5, 6)) %>% 
@@ -188,7 +188,7 @@ plot_1 = ggplot(sim_results_df,aes(x = as.factor(mu), fill = conclusion)) +
 plot_1
 ```
 
-From the proportion plot we can see that possibility of rejecting null hypothesis is directly proportional to value of the true mean for the given set of true means. 
+Description: From the proportion plot we can see that the possibility of rejecting null hypothesis is directly proportional to the magnitude of the value of the true mean for the given set of true means. Essentially larger mean implying higher probability of null rejection. 
 
 Plot showing the average estimate of mu on the y axis and the true value of mu on the x axis
 ```{r}
@@ -218,4 +218,4 @@ plot_3 =  reject_df  %>%
 plot_3
 ```
 
-Sample average of mu hat across tests for which the null is rejected is not equal to the true mean in most of the cases i.e. for mu = 0,1,2,3. This is because we reject the null hypothesis at alpha = 5%. This implies that we 95% confident that mu hat is not equal to the true population mean. 
+Sample average (mu hat) across tests for which the null is rejected is not equal to the true mean in most of the cases i.e. for mu = 0,1,2,3. This is because we reject the null hypothesis at alpha = 5%. This implies that we 95% confident that mu hat is not equal to the true population mean. 
