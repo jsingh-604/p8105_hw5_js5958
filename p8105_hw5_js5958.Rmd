@@ -187,6 +187,7 @@ plot_1 = ggplot(sim_results_df,aes(x = as.factor(mu), fill = conclusion)) +
 
 plot_1
 ```
+
 From the proportion plot we can see that possibility of rejecting null hypothesis is directly proportional to value of the true mean for the given set of true means. 
 
 Plot showing the average estimate of mu on the y axis and the true value of mu on the x axis
@@ -217,4 +218,4 @@ plot_3 =  reject_df  %>%
 plot_3
 ```
 
-sample average of mu hat across tests for which the null is rejected is not equal to the true mean in most of the cases i.e. for mu = 0,1,2,3. This is because we reject the null hypothesis at alpha = 5%. This implies that we 95% confident that mu hat is not equal to the true population mean. 
+Sample average of mu hat across tests for which the null is rejected is not equal to the true mean in most of the cases i.e. for mu = 0,1,2,3. This is because we reject the null hypothesis at alpha = 5%. This implies that we 95% confident that mu hat is not equal to the true population mean. 
